@@ -1,0 +1,77 @@
+[class*='bp5'],
+[class*='bp5']:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
+
+.header {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+
+    .header .reqs-input {
+        display: flex;
+    }
+
+        .header .reqs-input input {
+            width: 430px;
+            border: 1px solid #ccc;
+            margin-right: 5px;
+            color: #5f6b7c
+        }
+
+ul.diagrams {
+    padding:0 25px;
+    margin: 0px;
+    list-style: none;
+}
+li.diagram-item {
+    padding: 8px 15px;
+    border: 1px solid #bbd9ed;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+    li.diagram-item .name {
+        line-height: 30px;
+        font-size: 16px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        padding-left: 5px;
+        cursor: pointer;
+    }
+
+        li.diagram-item .name:hover {
+            background-color: rgba(187, 217, 237, .3);
+        }
+
+        li.diagram-item .name.active {
+            background-color: rgba(187, 217, 237, .3)
+        }
+
+        li.diagram-item .name.active:hover {
+            background-color: rgba(187, 217, 237, .2)
+        }
+
+    li.diagram-item .vizual {
+        overflow-y: auto !important;
+    }
+
+
+    .code-block {
+        box-shadow: none;
+        overflow: auto;
+        color: #800020;
+    }

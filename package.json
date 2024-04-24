@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@blueprintjs/icons": "^5.9.0",
+    "@types/uuid": "^9.0.8"
+  }
+}

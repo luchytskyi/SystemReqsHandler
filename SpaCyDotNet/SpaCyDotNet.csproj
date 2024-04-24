@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Platforms>AnyCPU</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Optimize>true</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+<!--
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Prefer32bit>false</Prefer32bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Optimize>false</Optimize>
+  </PropertyGroup>-->
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="pythonnet" Version="3.1.0-preview2024-04-07" />
+	
+	<!-- 
+		The library relies on Python.NET project (http://pythonnet.github.io/) to access Python functionality
+		Python.NET presents two considerations we must keep in mind
+			1) No .NET Core support. See https://github.com/pythonnet/pythonnet/issues/984
+			2) No up to date NuGet package. See https://github.com/pythonnet/pythonnet/wiki/Installation#nuget
+			
+		Anyway, we read in the project issue shown above, there's an alternative NuGet package with .NET Core support
+		It's unsupported but seems to work fine
+			https://github.com/pythonnet/pythonnet/issues/984#issuecomment-604752628
+			https://www.nuget.org/packages/Python.Runtime.UnofficialNetStandard/			
+	-->
+  </ItemGroup>
+
+</Project>
