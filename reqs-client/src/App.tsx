@@ -18,7 +18,7 @@ export function App() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
     const [drawer, setDrawer] = useState({
-        title: "Digram Uml",
+        title: "Diagram Uml",
         autoFocus: true,
         canEscapeKeyClose: true,
         canOutsideClickClose: true,
@@ -35,7 +35,7 @@ export function App() {
             return;
         }
         setIsProcessing(true);
-        axios.get(`http://localhost:5175/reqs/diagram/${text}`)
+        axios.get(`http://localhost:5175/reqs/diagram/${ text }`)
             .then(res => {
                 const response = res.data as IReqsDiagramResponse;
                 if (response == null || response.remoteUrl == null) {
@@ -49,20 +49,20 @@ export function App() {
                     url: response.remoteUrl
                 }, ...diagrams]);
             }).catch((error) => {
-                showWarning();
-                console.error(error);
-            })
+            showWarning();
+            console.error(error);
+        })
             .finally(() => setIsProcessing(false));
     };
 
     function onDiagramClick(d: IDiagramItem): void {
         setDiagrams(diagrams.map((i) => {
-            if (d.id == i.id) {
-                return { ...i, isActive: !i.isActive };
-            }
+                if (d.id == i.id) {
+                    return { ...i, isActive: !i.isActive };
+                }
 
-            return { ...i };
-        }
+                return { ...i };
+            }
         ));
     }
 
@@ -73,12 +73,12 @@ export function App() {
 
     function loadedUmlImage(d: IDiagramItem): void {
         setDiagrams(diagrams.map((i) => {
-            if (d.id == i.id) {
-                return { ...i, isLoaded: true };
-            }
+                if (d.id == i.id) {
+                    return { ...i, isLoaded: true };
+                }
 
-            return { ...i };
-        }
+                return { ...i };
+            }
         ));
     }
 
@@ -92,41 +92,52 @@ export function App() {
         }
     }
 
+    const removeItemHandler = (item: IDiagramItem): void => {
+        setDiagrams([...diagrams.filter(i => i.id !== item.id)]);
+    }
+
     return (
         <>
-            <h2 className="header">
+            <div className="search-control">
                 <InputGroup
-                    disabled={isProcessing}
+                    disabled={ isProcessing }
                     className="reqs-input"
-                    value={text}
+                    value={ text }
                     leftIcon="diagram-tree"
-                    maxLength={120}
-                    placeholder={isFocused ? "" : "Введіть вашу вимогу..."}
-                    onKeyDown={keyDownHandler}
-                    onChange={setValue}
-                    onFocus={() => setIsFocused(!isFocused)}
-                    onBlur={() => setIsFocused(!isFocused)}
+                    maxLength={ 120 }
+                    placeholder={ isFocused ? "" : "Введіть вашу вимогу..." }
+                    onKeyDown={ keyDownHandler }
+                    onChange={ setValue }
+                    onFocus={ () => setIsFocused(!isFocused) }
+                    onBlur={ () => setIsFocused(!isFocused) }
                 />
-                <Button className="go-btn" disabled={isProcessing} intent={isProcessing ? "none" : "primary"} onClick={() => process()}>
-                    {isProcessing ? <Spinner intent="none" size={18.5} /> : "Go"}
+                <Button className="go-btn" disabled={ isProcessing } intent={ isProcessing ? "none" : "primary" }
+                        onClick={ () => process() }>
+                    { isProcessing ? <Spinner intent="none" size={ 18.5 } /> : "Go" }
                 </Button>
-            </h2>
-            <ul className="diagrams">
-                {diagrams.map((d: IDiagramItem) => {
-                    return <DiagramItem key={d.id}
-                        item={d}
-                        onDiagramClick={onDiagramClick}
-                        onUmlShow={onUmlShow}
-                        loadedUmlImage={loadedUmlImage} />
-                })
-                }
-            </ul>
-            <Drawer {...drawer}
-                icon="code"
-                onClose={() => onUmlShow(null)}
-                size={"default"}>
+            </div>
+            <div className="content">
+                <div className="clear-all">
+                    { diagrams.length > 0 && <Button onClick={() => setDiagrams([])} minimal small text={"Видалити усі"} /> }
+                </div>
+                <ul className="diagrams">
+                    { diagrams.map((d: IDiagramItem) => {
+                        return <DiagramItem key={ d.id }
+                                            item={ d }
+                                            onDiagramClick={ onDiagramClick }
+                                            onUmlShow={ onUmlShow }
+                                            loadedUmlImage={ loadedUmlImage }
+                                            onItemRemove={ removeItemHandler } />
+                        })
+                    }
+                </ul>
+            </div>
+            <Drawer { ...drawer }
+                    icon="code"
+                    onClose={ () => onUmlShow(null) }
+                    size={ "default" }>
                 <Pre className="code-block">
-                    {selectedDiagram?.uml}
+                    { selectedDiagram?.uml }
                 </Pre>
             </Drawer>
         </>

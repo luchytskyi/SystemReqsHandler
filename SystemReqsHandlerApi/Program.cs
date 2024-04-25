@@ -11,7 +11,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 var app = builder.Build();
-
+app.UseCors(
+	options => 
+		options.WithOrigins("*")
+			.WithHeaders("*")
+			.WithMethods("*")
+);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -22,7 +27,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UsePythonEnvironment();
 app.MapControllers();
-app.UseCors(
-		options => options.WithOrigins("*").AllowAnyMethod()
-	);
+
 app.Run();

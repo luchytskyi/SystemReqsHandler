@@ -10,7 +10,7 @@ public class PythonEnvironmentMiddleware(RequestDelegate next)
 	{
 		if (!PythonEngine.IsInitialized)
 		{
-			PythonRuntimeUtils.Init("python312.dll", configuration.PythonVirtualEnvironment);
+			PythonRuntimeUtils.Init("python38.dll", configuration.PythonVirtualEnvironment);
 			PythonEngine.Initialize();
 			PythonEngine.BeginAllowThreads();
 		}

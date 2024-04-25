@@ -5,37 +5,60 @@
 }
 
 #root {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 2rem;
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
 }
 
-
-.header {
+.search-control {
+    margin: 30px 0;
     display: flex;
     align-items: center;
     flex-direction: row;
     justify-content: center;
 }
 
-    .header .reqs-input {
-        display: flex;
-    }
+.search-control .reqs-input {
+    display: flex;
+}
 
-        .header .reqs-input input {
-            width: 430px;
-            border: 1px solid #ccc;
-            margin-right: 5px;
-            color: #5f6b7c
-        }
+.search-control .reqs-input input {
+    width: 430px;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+    color: #5f6b7c
+}
+
+.content {
+    padding: 0 25px;
+}
+
+.clear-all {
+    text-align: left;
+}
+
+.clear-all button {
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.clear-all button span {
+    color: #53b5f6;
+}
+
+.header .remove [data-icon] {
+    width: 14px;
+    height: 14px;
+}
 
 ul.diagrams {
-    padding:0 25px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     list-style: none;
 }
+
 li.diagram-item {
     padding: 8px 15px;
     border: 1px solid #bbd9ed;
@@ -43,35 +66,54 @@ li.diagram-item {
     border-radius: 4px;
 }
 
-    li.diagram-item .name {
-        line-height: 30px;
-        font-size: 16px;
-        text-align: left;
-        display: flex;
-        align-items: center;
-        padding-left: 5px;
-        cursor: pointer;
-    }
+li.diagram-item .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
-        li.diagram-item .name:hover {
-            background-color: rgba(187, 217, 237, .3);
-        }
+li.diagram-item .header .remove {
+    color: rgba(187, 217, 237, .8);
+    visibility: hidden;
+    cursor: pointer;
+}
 
-        li.diagram-item .name.active {
-            background-color: rgba(187, 217, 237, .3)
-        }
+li.diagram-item .header:hover .remove {
+    visibility: visible;
+}
 
-        li.diagram-item .name.active:hover {
-            background-color: rgba(187, 217, 237, .2)
-        }
+li.diagram-item .header .name {
+    width: 100%;
+    margin-left: 5px;
+    line-height: 30px;
+    font-size: 16px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
 
-    li.diagram-item .vizual {
-        overflow-y: auto !important;
-    }
+li.diagram-item .header .name:hover {
+    background-color: rgba(187, 217, 237, .3);
+}
 
+li.diagram-item .header .name.active {
+    background-color: rgba(187, 217, 237, .3)
+}
 
-    .code-block {
-        box-shadow: none;
-        overflow: auto;
-        color: #800020;
-    }
+li.diagram-item .header .name.active:hover {
+    background-color: rgba(187, 217, 237, .2)
+}
+
+li.diagram-item .schema {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.code-block {
+    box-shadow: none;
+    overflow: auto;
+    color: #800020;
+}
