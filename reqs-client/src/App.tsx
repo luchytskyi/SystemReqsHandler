@@ -2,11 +2,12 @@
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import './App.css'
-import { Button, Collapse, Drawer, Icon, InputGroup, Position, Pre, ProgressBar, Spinner } from "@blueprintjs/core";
+import { Button, Drawer, InputGroup, Position, Pre, Spinner } from "@blueprintjs/core";
 import axios from "axios";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { AppToaster, IDiagramItem, IReqsDiagramResponse } from "./Models";
 import { v4 as guid } from "uuid";
+import { DiagramItem } from "./components/DiagramItem";
 
 const ERROR_MESSAGE: string = "Ой, якась халепа! (=";
 
@@ -61,7 +62,7 @@ export function App() {
             }
 
             return { ...i };
-         }
+        }
         ));
     }
 
@@ -112,15 +113,12 @@ export function App() {
             </h2>
             <ul className="diagrams">
                 {diagrams.map((d: IDiagramItem) => {
-                    return <li key={d.id} className="diagram-item">
-                        <div className={"name" + (d.isActive ? ' active' : '')} onClick={() => onDiagramClick(d)}><Icon icon={d.isActive ? "caret-down" : "caret-right"} />{d.text}</div>
-                        <Collapse className="vizual" isOpen={d.isActive}>
-                            {!d.isLoaded && <ProgressBar intent="none" />}
-                            <img src={d.url} alt="svg uml diagram" onLoad={() => loadedUmlImage(d)} />
-                            <Button minimal icon="code" text={"Ісходний код UML"} fill={true} onClick={() => onUmlShow(d)} />
-                        </Collapse>
-                    </li>
-                    })
+                    return <DiagramItem key={d.id}
+                        item={d}
+                        onDiagramClick={onDiagramClick}
+                        onUmlShow={onUmlShow}
+                        loadedUmlImage={loadedUmlImage} />
+                })
                 }
             </ul>
             <Drawer {...drawer}
