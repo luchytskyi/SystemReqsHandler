@@ -15,7 +15,7 @@ export function DiagramItem({ item, onDiagramClick, onUmlShow, loadedUmlImage, o
     return (
         <li className="diagram-item">
             <div className={ "header" }>
-                <Icon className={ "remove" } onClick={ () => onItemRemove(item) } icon={ "trash" } />
+                <Icon className={ "remove" } onClick={ () => onItemRemove(item) } icon={ "remove" } />
                 <div className={ "name" + (item.isActive ? ' active' : '') } onClick={ () => onDiagramClick(item) }>
                     <Icon icon={ item.isActive ? "caret-down" : "caret-right" } />
                     { name }

@@ -78,6 +78,10 @@ li.diagram-item .header .remove {
     cursor: pointer;
 }
 
+li.diagram-item .header .remove:hover {
+    color: indianred;
+}
+
 li.diagram-item .header:hover .remove {
     visibility: visible;
 }
