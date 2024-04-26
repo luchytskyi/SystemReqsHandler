@@ -135,8 +135,6 @@ li.diagram-item .schema {
     flex-direction: column;
 }
 
-
-
 .source-code .tabs-source-code {
    padding-left: 15px;
 }
@@ -146,9 +144,11 @@ li.diagram-item .schema {
 }
 
 
-.source-code .code-block {
-    box-shadow: none;
+.source-code .tabs-source-code {
     overflow: auto;
+}
+
+.source-code .tabs-source-code .code-block {
     color: #800020;
 }
 
@@ -161,4 +161,30 @@ li.diagram-item .schema {
     .bp5-spinner {
         height: 100%;
     }
+}
+
+.source-code .tabs-source-code pre {
+    outline: 1px solid #ccc; 
+    padding: 5px; 
+    margin-right: 10px; 
+}
+
+.source-code .tabs-source-code pre .string { 
+    color: green; 
+}
+
+.source-code .tabs-source-code pre .number {
+    color: darkorange;
+}
+
+.source-code .tabs-source-code pre .boolean {
+    color: blue;
+}
+
+.source-code .tabs-source-code pre .null {
+    color: magenta;
+}
+
+.source-code .tabs-source-code pre .key {
+    color: red;
 }
