@@ -78,7 +78,7 @@ ul.diagrams {
 }
 
 li.diagram-item {
-    padding: 8px 15px;
+    padding: 8px;
     border: 1px solid #bbd9ed;
     margin-bottom: 5px;
     border-radius: 4px;
@@ -135,9 +135,16 @@ li.diagram-item .schema {
     flex-direction: column;
 }
 
+
+
 .source-code .tabs-source-code {
    padding-left: 15px;
 }
+
+.source-code .tabs-source-code [role="tablist"] div:focus {
+    outline: none;
+}
+
 
 .source-code .code-block {
     box-shadow: none;

@@ -8,6 +8,6 @@
 
 		public string Tokens { get; set; } = string.Empty;
 
-		public IEnumerable<TableDto> DataSetSchema { get; set; } = Enumerable.Empty<TableDto>();
+		public IEnumerable<TableDto> DataSetDto { get; set; } = Enumerable.Empty<TableDto>();
 	}
 }

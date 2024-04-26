@@ -47,7 +47,7 @@ public class ReqsAnalyze(IReqsService reqsService, IClientSystemConfig systemCon
 		{
 			Uml = uml,
 			Tokens = fullSet,
-			DataSetSchema = tableDto,
+			DataSetDto = tableDto,
 			RemoteUrl = CreateRemotePlantUmlUrl(encodedUrl)
 		};
 	}

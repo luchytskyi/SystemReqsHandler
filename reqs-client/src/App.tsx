@@ -126,13 +126,9 @@ export function App() {
                     onClose={ () => onUmlShow(null) }
                     size={ "default" }>
                 <Tabs className={ "tabs-source-code" } id={ "code" }>
-                    <Tab title={ "UML" } id={ "uml" } panel={
-                        <Pre className="code-block">
-                            { selectedDiagram?.uml }
-                        </Pre> }
-                    />
-                    <Tab title={ "TOKENS" } id={ "tkn" } panel={ <Pre className={"code-block"}>{ selectedDiagram?.tokens }</Pre> } />
-                    <Tab title={ "Data" } id={ "data" } panel={ <Pre className={"code-block"}>{ selectedDiagram?.dataSetDto }</Pre> } />
+                    <Tab title={ "UML" } id={ "uml" } panel={ <Pre className="code-block" children={ selectedDiagram?.uml }/> } />
+                    <Tab title={ "TOKENS" } id={ "tkn" } panel={ <Pre className={"code-block"} children={ selectedDiagram?.tokens }/> } />
+                    <Tab title={ "DATA" } id={ "data" } panel={ <Pre className={"code-block"} children={ selectedDiagram?.dataSetDto }/> } />
                 </Tabs>
             </Drawer>
             <Overlay2 isOpen={ isLoading }>
