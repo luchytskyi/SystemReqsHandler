@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using ReqsHandler.Core.Configuration;
+﻿using ReqsHandler.Core.Configuration;
 using ReqsHandler.Core.Database;
 using ReqsHandler.Core.Services;
 using SystemReqsHandlerApi.Services;
@@ -12,11 +11,11 @@ public static class DependencyInjection
 	{
 		var collection = builder.Services;
 		var configurationManager = builder.Configuration;
-
-		collection.AddSingleton<IDataBaseConnection>(_ => configurationManager.GetDbConnection());
 		collection.AddSingleton<IAppConfiguration>(_ => configurationManager.GetPythonConfiguration());
 		collection.AddSingleton<IClientSystemConfig>(_ => configurationManager.GetClientSystemConfig());
-		collection.AddSingleton<ISpacyInstance, SpacyInstance>();
+		collection.AddSingleton<ICurrentContext, CurrentContext>();
+		collection.AddScoped<ISpacyInstance, SpacyInstance>();
+
 		collection.AddTransient<IReqsDbProvider, ReqsDbProvider>();
 		collection.AddTransient<IDbEntitiesLemmatizer, DbEntitiesLemmatizer>();
 		collection.AddTransient<IReqsAnalyzer, ReqsAnalyze>();

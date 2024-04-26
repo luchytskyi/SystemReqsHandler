@@ -5,13 +5,13 @@ namespace ReqsHandler.Core.Services;
 
 public class SpacyInstance : ISpacyInstance
 {
-	private readonly Lazy<Lang> _lang = new(() => Spacy.Load(_configuration.SpacyLang));
-	private static IAppConfiguration _configuration = null!;
+	private static ICurrentContext _context = null!;
+	private Lang? _lang;
 
-	public SpacyInstance(IAppConfiguration configuration)
+	public SpacyInstance(ICurrentContext context)
 	{
-		_configuration = configuration;
+		_context = context;
 	}
 
-	public Lang LangDocument => _lang.Value;
+	public Lang LangDocument => _lang ??= Spacy.Load(_context.DataSet.LangModel);
 }

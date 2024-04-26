@@ -1,5 +1,4 @@
-﻿using System.IO.Compression;
-using System.Text;
+﻿using System.Text;
 using Microsoft.SqlServer.Management.Smo;
 using PlantUml.Net;
 using ReqsHandler.Core.Configuration;
@@ -9,7 +8,7 @@ using SystemReqsHandlerApi.Models;
 
 namespace SystemReqsHandlerApi.Services;
 
-public class ReqsAnalyze(IReqsService reqsService, IAppConfiguration appConfiguration) : IReqsAnalyzer
+public class ReqsAnalyze(IReqsService reqsService, IClientSystemConfig systemConfig) : IReqsAnalyzer
 {
 	public IEnumerable<TableDto> GetSchema()
 	{
@@ -21,6 +20,7 @@ public class ReqsAnalyze(IReqsService reqsService, IAppConfiguration appConfigur
 		var result = new StringBuilder();
 		var doc = reqsService.GetDocument(text);
 
+		result.AppendLine("Text Lemma Pos Tag Dep Shape IsAlpha IsStop");
 		foreach (var token in doc.Tokens)
 		{
 			result.AppendLine(
@@ -59,7 +59,7 @@ public class ReqsAnalyze(IReqsService reqsService, IAppConfiguration appConfigur
 
 	private string CreateRemotePlantUmlUrl(string encodedUrl)
 	{
-		var remoteServerUrl = appConfiguration.RemoteUmlServerUrl.TrimEnd('/');
+		var remoteServerUrl = systemConfig.RemoteUmlServerUrl.TrimEnd('/');
 		return $"{remoteServerUrl}/{encodedUrl}";
 	}
 

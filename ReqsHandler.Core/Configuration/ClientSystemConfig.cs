@@ -2,5 +2,9 @@
 
 public class ClientSystemConfig : IClientSystemConfig
 {
-	public string ColumnIdentifierPrefix { get; set; } = string.Empty;
+	public string RemoteUmlServerUrl { get; set; } = string.Empty;
+
+	public Dictionary<string, DataSet> DataSet { get; set; } = new();
+
+	public string DefaultDataSet { get; set; } = string.Empty;
 }

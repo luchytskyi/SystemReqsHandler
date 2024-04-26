@@ -6,11 +6,12 @@ using SpaCyDotNet.api;
 
 namespace ReqsHandler.Core.Services;
 
-public partial class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, IClientSystemConfig clientConfig)
+public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext context)
 	: IDbEntitiesLemmatizer
 {
-	private const string RegexSplitNames = "[А-ЯЁЇІЄҐ][^А-ЯЁЇІЄҐ]*";
 	private Lang Nlp => spacyInstance.LangDocument;
+
+	private Regex ColumnSplitRegex => new Regex(context.DataSet.ColumnSplitRegex);
 
 	public IEnumerable<ReqsTable> MapTablesLemma(TableCollection? collection)
 	{
@@ -40,7 +41,7 @@ public partial class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, IClientS
 	private bool SplitIfNeed(string entityName, out IList<string> result)
 	{
 		var isSplit = false;
-		var parts = EntityNameRegex().Matches(CleanUpName(entityName));
+		var parts = ColumnSplitRegex.Matches(CleanUpName(entityName));
 		if (parts.Count > 1)
 		{
 			isSplit = true;
@@ -78,15 +79,13 @@ public partial class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, IClientS
 	{
 		var isSplitName = SplitIfNeed(name, out splitList);
 		var doc = Nlp.GetDocument(string.Join(" ", splitList));
-		lemmas = doc.Tokens.Where(t => !t.IsPunct && !t.IsStop).Select(t => t.Lemma);
+		lemmas = doc.Tokens.Where(t => !t.IsPunct).Select(t => t.Lemma.ToLower());
+
 		return isSplitName;
 	}
 
 	private string CleanUpName(string name)
 	{
-		return name.Replace(clientConfig.ColumnIdentifierPrefix, "");
+		return name.Replace(context.DataSet.ColumnIdentifierPrefix, "");
 	}
-
-	[GeneratedRegex(RegexSplitNames)]
-	private static partial Regex EntityNameRegex();
 }

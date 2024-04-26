@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^5.10.2",
+    "@blueprintjs/select": "^5.1.4",
     "@types/uuid": "^9.0.8",
     "axios": "^1.6.8",
     "graphviz": "^0.0.9",
     "plantuml": "^0.0.2",
     "react": "^18.2.0",
+    "react-cookie": "^7.1.4",
     "react-dom": "^18.2.0",
     "react-zoom-pan-pinch": "^3.4.4",
     "uuid": "^9.0.1"

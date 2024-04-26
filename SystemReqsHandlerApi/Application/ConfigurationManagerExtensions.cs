@@ -1,63 +1,46 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using ReqsHandler.Core.Configuration;
-using ReqsHandler.Core.Database;
-using ReqsHandler.Core.Services;
 
 namespace SystemReqsHandlerApi.Application;
 
 public static class ConfigurationManagerExtensions
 {
-	public static DataBaseConnection GetDbConnection(this ConfigurationManager configurationManager)
-	{
-		var dbConnection = configurationManager.GetConnectionString("DefaultConnection");
-		if (dbConnection == null || dbConnection.IsNullOrEmpty())
-		{
-			throw new ArgumentException("DefaultConnection should be specified in appsettings.json");
-		}
-
-		return new DataBaseConnection(dbConnection);
-	}
+	private const string ErrorMessage = "should be specified in appsettings.json";
 
 	public static AppConfiguration GetPythonConfiguration(this ConfigurationManager configuration)
 	{
 		var settings = configuration?.GetSection("nlpSettings");
 		if (settings == null)
 		{
-			throw new ArgumentException("nlpSettings should be configured in appsettings.json");
-		}
-
-		var langModel = settings["LangModel"];
-		if (langModel == null || langModel.IsNullOrEmpty())
-		{
-			throw new ArgumentException("LangModel should be specified in appsettings.json");
+			throw new ArgumentException($"nlpSettings {ErrorMessage}");
 		}
 
 		var virtualEnv = settings["PythonVirtualEnvironment"];
 		if (virtualEnv == null || virtualEnv.IsNullOrEmpty())
 		{
-			throw new ArgumentException("PythonVirtualEnvironment should be specified in appsettings.json");
+			
+			throw new ArgumentException($"PythonVirtualEnvironment {ErrorMessage}");
 		}
 
-		var remoteUmlServer = settings["RemoteUmlServerUrl"];
-		if (remoteUmlServer == null || remoteUmlServer.IsNullOrEmpty())
+		var interpreter = settings["PythonInterpreter"];
+		if (interpreter == null || interpreter.IsNullOrEmpty())
 		{
-			throw new ArgumentException("RemoteUmlServerUrl should be specified in appsettings.json");
+			throw new ArgumentException($"PythonInterpreter {ErrorMessage}");
 		}
 
-		return new AppConfiguration(virtualEnv, langModel, remoteUmlServer);
+		return new AppConfiguration(virtualEnv, interpreter);
 	}
 
 	public static ClientSystemConfig GetClientSystemConfig(this ConfigurationManager configuration)
 	{
-		var columnPrefix = configuration?.GetSection("clientSystemCfg")["ColumnIdentifierPrefix"];
-		if (columnPrefix == null || columnPrefix.IsNullOrEmpty())
+		var clientSystemCfg = configuration.GetSection("ClientSystemConfig");
+		if (clientSystemCfg == null)
 		{
-			throw new ArgumentException("ColumnIdentifierPrefix should be specified in appsettings.json");
+			throw new ArgumentException($"ClientSystemConfig  {ErrorMessage}");
 		}
 
-		return new ClientSystemConfig
-		{
-			ColumnIdentifierPrefix = columnPrefix
-		};
+		var config = new ClientSystemConfig();
+		clientSystemCfg.Bind(config);
+		return config;
 	}
 }

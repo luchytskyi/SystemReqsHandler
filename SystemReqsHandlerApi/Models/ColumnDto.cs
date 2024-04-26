@@ -14,7 +14,7 @@ public class ColumnDto
 
 	public bool IsPrimaryKey { get; set; }
 
-	public string DataType { get; set; }
+	public string DataType { get; set; } = string.Empty;
 
 	public SqlDataType SqlDataType { get; set; }
 

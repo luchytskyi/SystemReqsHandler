@@ -1,5 +1,7 @@
-[class*='bp5'],
-[class*='bp5']:focus {
+[class*='bp5-input'],
+[class*='bp5-input']:focus,
+[class*='button'],
+[class*='button']:focus {
     outline: none;
     box-shadow: none;
 }
@@ -24,17 +26,32 @@
     display: flex;
 }
 
+.search-control .reqs-input [class*="-icon"] {
+    margin: 10px;
+}
+
 .search-control .reqs-input input {
     width: 430px;
     border: 1px solid #ccc;
     margin-right: 5px;
-    color: #5f6b7c
+    color: #5f6b7c;
+    height: 36px;
+}
+
+
+.search-control button {
+    height: 34px;
+    width: 38px;
 }
 
 .content {
     padding: 0 25px;
 }
 
+.data-set {
+    display: flex;
+    justify-content: center;
+}
 .clear-all {
     text-align: left;
 }
@@ -120,4 +137,15 @@ li.diagram-item .schema {
     box-shadow: none;
     overflow: auto;
     color: #800020;
+}
+
+
+.page-spinner {
+    width: 100%;
+    height: 100%;
+    z-index: 18;
+
+    .bp5-spinner {
+        height: 100%;
+    }
 }

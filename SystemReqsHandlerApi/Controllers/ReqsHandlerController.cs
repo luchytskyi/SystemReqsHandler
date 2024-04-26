@@ -1,12 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using ReqsHandler.Core.Configuration;
 using SystemReqsHandlerApi.Models;
 using SystemReqsHandlerApi.Services;
 
 namespace SystemReqsHandlerApi.Controllers;
 
 [Route("reqs")]
-public class ReqsHandlerController(IReqsAnalyzer analyzer) : ControllerBase
+public class ReqsHandlerController(IReqsAnalyzer analyzer, IClientSystemConfig config) : ControllerBase
 {
+	[HttpGet("config")]
+	public ActionResult<IEnumerable<DataSetDto>> Get()
+	{
+		return Ok(config.DataSet.Keys.Select(key => new DataSetDto
+		{
+			Lang = key,
+			Schema = GetSchemaName(key)
+		}));
+	}
+
+	private string GetSchemaName(string key)
+	{
+		if (config.DataSet.TryGetValue(key, out var dataSet))
+		{
+			var connection = new SqlConnectionStringBuilder(dataSet.ConnectionDb);
+			return (string)(connection.TryGetValue("Initial Catalog", out var schema) && schema is string
+				? schema
+				: string.Empty);
+		}
+
+		return string.Empty;
+	}
+
 	[HttpGet("tokenize")]
 	public ActionResult<string[]> Tokenize(string text)
 	{

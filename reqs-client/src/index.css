@@ -13,6 +13,50 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root{
+
+  --inputX: 0.9;
+  --inputY: -1;
+  --output1: 0;
+  --output2: 0;
+  --output3: 0;
+  --output4: 0;
+
+  --output1bias: 0.006412765611663633;
+  --output2bias: 0.007072853542676219;
+  --output3bias: 0.0064746685639952214;
+  --output4bias: 0.004851470988693036;
+
+  --weights1-1: -0.9807254999119579;
+  --weights1-2: 0.9813663133332142;
+  --weights1-3: -0.9817224902785696;
+  --weights1-4: 0.9817919593383302;
+  --weights2-1: -0.9809082670731147;
+  --weights2-2: -0.9816176935504328;
+  --weights2-3: 0.9815336794202348;
+  --weights2-4: 0.9815925299039976;
+
+
+  /* propogate */
+  --output1a: calc((var(--weights1-1) * var(--inputX)) + (var(--weights2-1) * var(--inputY)));
+  --output2a: calc((var(--weights1-2) * var(--inputX)) + (var(--weights2-2) * var(--inputY)));
+  --output3a: calc((var(--weights1-3) * var(--inputX)) + (var(--weights2-3) * var(--inputY)));
+  --output4a: calc((var(--weights1-4) * var(--inputX)) + (var(--weights2-4) * var(--inputY)));
+
+  --output1b: calc(max(0, var(--output1a)) + var(--output1bias));
+  --output2b: calc(max(0, var(--output2a)) + var(--output2bias));
+  --output3b: calc(max(0, var(--output3a)) + var(--output3bias));
+  --output4b: calc(max(0, var(--output4a)) + var(--output4bias));
+
+  /* categorise */
+  --maxOut: max(var(--output1b), var(--output2b), var(--output3b), var(--output4b));
+
+  --output1c: max(calc(1 - ((var(--output1b) - var(--maxOut)) * (var(--output1b) - var(--maxOut)) * 1000000000)), 0);
+  --output2c: max(calc(1 - ((var(--output2b) - var(--maxOut)) * (var(--output2b) - var(--maxOut)) * 1000000000)), 0);
+  --output3c: max(calc(1 - ((var(--output3b) - var(--maxOut)) * (var(--output3b) - var(--maxOut)) * 1000000000)), 0);
+  --output4c: max(calc(1 - ((var(--output4b) - var(--maxOut)) * (var(--output4b) - var(--maxOut)) * 1000000000)), 0);
+}
+
 a {
   font-weight: 500;
   color: #646cff;

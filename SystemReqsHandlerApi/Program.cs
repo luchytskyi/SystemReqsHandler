@@ -13,10 +13,11 @@ builder.Services.AddControllers();
 var app = builder.Build();
 app.UseCors(
 	options => 
-		options.WithOrigins("*")
-			.WithHeaders("*")
+			options.WithHeaders("*")
 			.WithMethods("*")
+			.AllowCredentials().SetIsOriginAllowed(h=>true)
 );
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -24,7 +25,6 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UsePythonEnvironment();
 app.MapControllers();
 

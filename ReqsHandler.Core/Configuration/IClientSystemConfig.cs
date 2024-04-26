@@ -2,5 +2,9 @@
 
 public interface IClientSystemConfig
 {
-	public string ColumnIdentifierPrefix { get; set; }
+	public string RemoteUmlServerUrl { get; set; }
+
+	public Dictionary<string, DataSet> DataSet { get; set; }
+
+	string DefaultDataSet { get; set; }
 }
