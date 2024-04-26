@@ -22,14 +22,14 @@ export function DiagramItem({ item, onDiagramClick, onUmlShow, loadedUmlImage, o
                 </div>
             </div>
             <Collapse isOpen={ item.isActive }>
-                { !item.isLoaded && <ProgressBar intent="none" /> }
+                { !item.isSrcLoaded && <ProgressBar intent="none" /> }
                 <TransformWrapper centerOnInit initialScale={ 0.8 }>
                     <div className={ "schema" }>
-                        <Controls diagram={ item } onUmlShow={ () => onUmlShow(item) } />
+                        <Controls isLoaded={item.isSrcLoaded} diagram={ item } onUmlShow={ () => onUmlShow(item) } />
                         <TransformComponent>
                             <img src={ item.url } alt="svg uml diagram" onLoad={ () => loadedUmlImage(item) } />
                         </TransformComponent>
-                        <Controls diagram={ item } onUmlShow={ () => onUmlShow(item) } />
+                        <Controls isLoaded={item.isSrcLoaded} diagram={ item } onUmlShow={ () => onUmlShow(item) } />
                     </div>
                 </TransformWrapper>
             </Collapse>

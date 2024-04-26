@@ -1,5 +1,5 @@
 ﻿import './App.css'
-import { Button, Drawer, MenuItem, Overlay2, Position, Pre, Spinner } from "@blueprintjs/core";
+import { Button, Drawer, MenuItem, Overlay2, Position, Pre, Spinner, Tab, Tabs } from "@blueprintjs/core";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { IDataSet, IDiagramItem } from "./Models";
 import { v4 as guid } from "uuid";
@@ -50,7 +50,10 @@ export function App() {
             id: guid(),
             text: text,
             uml: diagram.uml,
-            url: diagram.remoteUrl
+            url: diagram.remoteUrl,
+            tokens: diagram.tokens,
+            isSrcLoaded: false,
+            dataSetDto: diagram.dataSetDto
         }, ...diagrams]);
     };
 
@@ -71,7 +74,7 @@ export function App() {
     }
 
     const loadedUmlImage = (d: IDiagramItem): void => {
-        setDiagrams(diagrams.map((i) => d.id == i.id ? { ...i, isLoaded: true } : { ...i }));
+        setDiagrams(diagrams.map((i) => d.id == i.id ? { ...i, isSrcLoaded: true } : { ...i }));
     }
 
     const setValue = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -114,17 +117,23 @@ export function App() {
                                             onUmlShow={ onUmlShow }
                                             loadedUmlImage={ loadedUmlImage }
                                             onItemRemove={ removeItemHandler } />
-                        })
+                    })
                     }
                 </ul>
             </div>
-            <Drawer { ...drawer }
+            <Drawer className={ "source-code" } { ...drawer }
                     icon="code"
                     onClose={ () => onUmlShow(null) }
                     size={ "default" }>
-                <Pre className="code-block">
-                    { selectedDiagram?.uml }
-                </Pre>
+                <Tabs className={ "tabs-source-code" } id={ "code" }>
+                    <Tab title={ "UML" } id={ "uml" } panel={
+                        <Pre className="code-block">
+                            { selectedDiagram?.uml }
+                        </Pre> }
+                    />
+                    <Tab title={ "TOKENS" } id={ "tkn" } panel={ <Pre className={"code-block"}>{ selectedDiagram?.tokens }</Pre> } />
+                    <Tab title={ "Data" } id={ "data" } panel={ <Pre className={"code-block"}>{ selectedDiagram?.dataSetDto }</Pre> } />
+                </Tabs>
             </Drawer>
             <Overlay2 isOpen={ isLoading }>
                 <div className={ "page-spinner" }>

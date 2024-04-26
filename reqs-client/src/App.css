@@ -52,6 +52,7 @@
     display: flex;
     justify-content: center;
 }
+
 .clear-all {
     text-align: left;
 }
@@ -112,6 +113,7 @@ li.diagram-item .header .name {
     display: flex;
     align-items: center;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 li.diagram-item .header .name:hover {
@@ -133,7 +135,11 @@ li.diagram-item .schema {
     flex-direction: column;
 }
 
-.code-block {
+.source-code .tabs-source-code {
+   padding-left: 15px;
+}
+
+.source-code .code-block {
     box-shadow: none;
     overflow: auto;
     color: #800020;

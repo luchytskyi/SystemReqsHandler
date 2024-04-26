@@ -9,7 +9,5 @@ public interface IReqsAnalyzer
 
 	string Tokenize(string text);
 
-	string BuildUml(string text);
-
 	ReqsDiagramResponse GetDiagram(string text);
 }

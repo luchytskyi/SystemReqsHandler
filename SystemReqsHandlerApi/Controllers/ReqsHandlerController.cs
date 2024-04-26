@@ -44,10 +44,10 @@ public class ReqsHandlerController(IReqsAnalyzer analyzer, IClientSystemConfig c
 		return Ok(analyzer.GetSchema());
 	}
 
-	[HttpGet("analyze")]
-	public ActionResult<string> Analyze(string text)
+	[HttpGet("uml")]
+	public ActionResult<string> GetDiagramUml(string text)
 	{
-		return Ok(analyzer.BuildUml(text));
+		return Ok(analyzer.GetDiagram(text).Uml);
 	}
 
     [HttpGet("diagram/{text}")]

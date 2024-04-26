@@ -19,40 +19,35 @@ public class ReqsAnalyze(IReqsService reqsService, IClientSystemConfig systemCon
 	{
 		var result = new StringBuilder();
 		var doc = reqsService.GetDocument(text);
-
-		result.AppendLine("Text Lemma Pos Tag Dep Shape IsAlpha IsStop");
+		result.AppendLine($"|{"Text",-5}|{"Lemma",-5}|{"Pos",-5}|{"Tag",-5}");
 		foreach (var token in doc.Tokens)
 		{
 			result.AppendLine(
-				$"{token.Text} {token.Lemma} {token.PoS} {token.Tag} {token.Dep} {token.Shape} {token.IsAlpha} {token.IsStop}");
+				$"|{token.Text,-5}|{token.Lemma,-5}|{token.PoS,-5}|{token.Tag,-5}");
 		}
 
 		return result.ToString();
 	}
 
-	public string BuildUml(string text)
+	public ReqsDiagramResponse GetDiagram(string text)
 	{
-		var lemmas = RetrieveLemmaFromText(text);
+		var lemmas = RetrieveLemmaFromText(text, out var fullSet);
 		if (lemmas.Count == 0)
 		{
-			return "Lemmas weren't find in the speech.";
+			throw new ArgumentException("Lemmas weren't find in the speech.");
 		}
 
 		var tables = reqsService.GetTables();
-		var dto = ModelToDto(tables.ToList()).ToList();
-
-		var generator = new PlantUmlBuilder(dto);
-		return generator.Build(lemmas);
-	}
-
-	public ReqsDiagramResponse GetDiagram(string text) 
-	{
-		var uml = BuildUml(text);
+		var tableDto = ModelToDto(tables.ToList()).ToList();
+		var generator = new PlantUmlBuilder(tableDto);
+		var uml = generator.Build(lemmas);
 		var encodedUrl = PlantUmlTextEncoding.EncodeUrl(uml);
 
 		return new ReqsDiagramResponse
 		{
-			Uml = BuildUml(uml),
+			Uml = uml,
+			Tokens = fullSet,
+			DataSetSchema = tableDto,
 			RemoteUrl = CreateRemotePlantUmlUrl(encodedUrl)
 		};
 	}
@@ -63,18 +58,22 @@ public class ReqsAnalyze(IReqsService reqsService, IClientSystemConfig systemCon
 		return $"{remoteServerUrl}/{encodedUrl}";
 	}
 
-	private List<string> RetrieveLemmaFromText(string text)
+	private List<string> RetrieveLemmaFromText(string text, out string fullSet)
 	{
 		var doc = reqsService.GetDocument(text);
 		var lemmas = new List<string>();
+		var fillSetResult = new StringBuilder();
+		fillSetResult.AppendLine($"|{"Text",-5}|{"Lemma",-5}|{"Pos",-5}|{"Tag",-5}");
 		foreach (var token in doc.Tokens)
 		{
-			if (!token.IsStop && !token.IsPunct) 
+			fillSetResult.AppendLine($"|{token.Text,-5}|{token.Lemma,-5}|{token.PoS,-5}|{token.Tag,-5}");
+			if (token is { IsStop: false, IsPunct: false }) 
 			{
 				lemmas.Add(token.Lemma);
 			}
 		}
 
+		fullSet = fillSetResult.ToString();
 		return lemmas;
 	}
 

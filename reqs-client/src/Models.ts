@@ -14,13 +14,17 @@ export interface IDiagramItem {
     url: string;
     uml: string;
     text: string;
+    dataSetDto: any;
+    tokens: string;
     isActive?: boolean;
-    isLoaded?: boolean;
+    isSrcLoaded: boolean;
 }
 
 export interface IReqsDiagramResponse {
     remoteUrl: string;
     uml: string;
+    tokens: string;
+    dataSetDto: any;
 }
 
 export const AppToaster = OverlayToaster.createAsync({
