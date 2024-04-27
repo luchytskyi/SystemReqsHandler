@@ -1,6 +1,6 @@
 import { Button, Icon, InputGroup, Spinner } from "@blueprintjs/core";
 
-export function Search(props: {
+export default function Search(props: {
     disabled: boolean,
     value: string,
     focused: boolean,

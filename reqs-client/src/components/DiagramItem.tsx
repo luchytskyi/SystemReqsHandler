@@ -3,7 +3,7 @@ import { IDiagramItem } from "../Models";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import { Controls } from "./Controls";
 
-export function DiagramItem({ item, onDiagramClick, onUmlShow, loadedUmlImage, onItemRemove }: {
+export default function DiagramItem({ item, onDiagramClick, onUmlShow, loadedUmlImage, onItemRemove }: {
     item: IDiagramItem;
     onDiagramClick: (d: IDiagramItem) => void;
     onUmlShow: (diagram: IDiagramItem | null) => void;

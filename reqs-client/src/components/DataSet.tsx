@@ -5,7 +5,7 @@ import { Button } from "@blueprintjs/core";
 import { IDataSet } from "../Models.ts";
 import { useEffect } from "react";
 
-export function DataSet({ dataSetItems, itemRenderer, onItemSelect, dataSet }: {
+export default function DataSet({ dataSetItems, itemRenderer, onItemSelect, dataSet }: {
     dataSetItems: IDataSet[],
     itemRenderer: (d: IDataSet, itemProps: ItemRendererProps) => JSX.Element,
     onItemSelect: (d: IDataSet) => void,
