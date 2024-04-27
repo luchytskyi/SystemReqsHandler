@@ -1,5 +1,5 @@
 ﻿import './App.css'
-import { Button, MenuItem, Overlay2, Spinner } from "@blueprintjs/core";
+import { Button, Icon, MenuItem, Overlay2, Spinner } from "@blueprintjs/core";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { IDataSet, IDiagramItem } from "./Models";
 import { v4 as guid } from "uuid";
@@ -76,11 +76,13 @@ export function App() {
 
     const renderDataSet = (d: IDataSet, itemProps: ItemRendererProps) => {
         return <MenuItem
-            key={d.lang}
-            selected={d.lang == dataSet?.lang}
-            text={d.schema}
-            onClick={itemProps.handleClick}
-            icon={d.lang == dataSet?.lang ? 'database' : null}
+            key={ d.lang }
+            onClick={ itemProps.handleClick }
+            text={ <div className={"dataSet-menu-item"}>
+                     <span>{ d.schema }</span>
+                     { d.lang == dataSet?.lang ? <Icon icon={ "tick" } /> : undefined }
+                    </div> 
+                }
         />
     };
 
@@ -88,19 +90,19 @@ export function App() {
         <>
             { dataSetItems.length > 1 &&
                 <DataSet
-                    dataSetItems={dataSetItems}
-                    itemRenderer={renderDataSet}
-                    onItemSelect={setDataSet}
-                    dataSet={dataSet} />
+                    dataSetItems={ dataSetItems }
+                    itemRenderer={ renderDataSet }
+                    onItemSelect={ setDataSet }
+                    dataSet={ dataSet } />
             }
             <Search
-                disabled={isProcessing}
-                value={text}
-                focused={isFocused}
-                onKeyDown={keyDownHandler}
-                onChange={setValue}
-                onFocus={() => setIsFocused(!isFocused)}
-                onClick={() => process()} />
+                disabled={ isProcessing }
+                value={ text }
+                focused={ isFocused }
+                onKeyDown={ keyDownHandler }
+                onChange={ setValue }
+                onFocus={ () => setIsFocused(!isFocused) }
+                onClick={ () => process() } />
             <div className="content">
                 <div className="clear-all">
                     { diagrams.length > 0 &&
@@ -118,8 +120,9 @@ export function App() {
                     }
                 </ul>
             </div>
-            {selectedDiagram &&
-                <SourceCode diagram={selectedDiagram} isOpen={isSourceCodeOpen} onClose={() => onSorceCodeShow(null)} />
+            { selectedDiagram &&
+                <SourceCode diagram={ selectedDiagram } isOpen={ isSourceCodeOpen }
+                            onClose={ () => onSorceCodeShow(null) } />
             }
             <Overlay2 isOpen={ isLoading }>
                 <div className={ "page-spinner" }>

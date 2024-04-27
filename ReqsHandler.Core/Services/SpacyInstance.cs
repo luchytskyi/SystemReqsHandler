@@ -13,5 +13,10 @@ public class SpacyInstance : ISpacyInstance
 		_context = context;
 	}
 
-	public Lang LangDocument => _lang ??= Spacy.Load(_context.DataSet.LangModel);
+	private Lang LangDocument => _lang ??= Spacy.Load(_context.DataSet.LangModel);
+
+	public Doc GetDocument(string text)
+	{
+		return LangDocument.GetDocument(text.ToLower());
+	}
 }

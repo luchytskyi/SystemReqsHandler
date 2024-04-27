@@ -16,13 +16,14 @@ public class PythonEnvironmentMiddleware(RequestDelegate next)
 			PythonEngine.BeginAllowThreads();
 		}
 
-		if (ctx.Request.Cookies["lang"] is { } lang && !lang.IsNullOrEmpty() && !context.CurrentLang.Equals(lang))
-		{
-			context.Set(lang);
-		}
-		else
+		var lang = ctx.Request.Cookies["lang"];
+		if (lang is null)
 		{
 			ctx.Response.Cookies.Append("lang", systemConfig.DefaultDataSet);
+		}
+		else if (!lang.IsNullOrEmpty() && !context.CurrentLang.Equals(lang))
+		{
+			context.Set(lang);
 		}
 
 		await next.Invoke(ctx);

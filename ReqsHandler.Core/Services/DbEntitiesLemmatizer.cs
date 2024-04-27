@@ -9,8 +9,6 @@ namespace ReqsHandler.Core.Services;
 public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext context)
 	: IDbEntitiesLemmatizer
 {
-	private Lang Nlp => spacyInstance.LangDocument;
-
 	private Regex ColumnSplitRegex => new Regex(context.DataSet.ColumnSplitRegex);
 
 	public IEnumerable<ReqsTable> MapTablesLemma(TableCollection? collection)
@@ -78,7 +76,7 @@ public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext 
 	private bool SplitAndLemmatize(string name, out IList<string> splitList, out IEnumerable<string> lemmas)
 	{
 		var isSplitName = SplitIfNeed(name, out splitList);
-		var doc = Nlp.GetDocument(string.Join(" ", splitList));
+		var doc = spacyInstance.GetDocument(string.Join(" ", splitList));
 		lemmas = doc.Tokens.Where(t => !t.IsPunct).Select(t => t.Lemma.ToLower());
 
 		return isSplitName;
