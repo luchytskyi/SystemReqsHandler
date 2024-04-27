@@ -8,7 +8,7 @@ public class ReqsService(IReqsDbProvider dbProvider, ISpacyInstance spacyInstanc
 {
 	public Doc GetDocument(string text)
 	{
-		return spacyInstance.LangDocument.GetDocument(text);
+		return spacyInstance.GetDocument(text);
 	}
 
 	public IEnumerable<ReqsTable> GetTables()

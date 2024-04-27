@@ -13,7 +13,6 @@ export default function DataSet({ dataSetItems, itemRenderer, onItemSelect, data
 }) {
 
     const [cookie, setCookie] = useCookies(['lang']);
-
     useEffect(() => {
         if (dataSet == null && cookie.lang) {
             onItemSelect(dataSetItems.find(d => d.lang === cookie.lang)!);
@@ -26,14 +25,15 @@ export default function DataSet({ dataSetItems, itemRenderer, onItemSelect, data
     };
 
     return <CookiesProvider>
-        <div className={ "data-set" }>
+        <div className="data-set">
             <Select<IDataSet>
+                inputProps={{ leftIcon: "add" }}
                 popoverProps={ { minimal: true } }
                 filterable={ false }
                 items={ dataSetItems }
                 itemRenderer={ itemRenderer }
                 onItemSelect={ selectItemHandler }>
-                <Button text={ dataSet?.schema } rightIcon="double-caret-vertical" />
+                <Button icon="data-connection" text={ dataSet?.schema } rightIcon="double-caret-vertical" />
             </Select>
         </div>
     </CookiesProvider>

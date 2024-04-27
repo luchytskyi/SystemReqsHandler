@@ -4,5 +4,5 @@ namespace ReqsHandler.Core.Services;
 
 public interface ISpacyInstance
 {
-	public Lang LangDocument { get; }
+	Doc GetDocument(string text);
 }

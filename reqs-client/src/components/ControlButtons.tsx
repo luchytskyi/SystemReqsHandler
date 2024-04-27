@@ -2,7 +2,7 @@
 import { IDiagramItem } from "../Models";
 import { useControls } from "react-zoom-pan-pinch";
 
-export const Controls = ({ isLoaded, diagram, onUmlShow }: { isLoaded: boolean, diagram: IDiagramItem; onUmlShow: (d: IDiagramItem) => void; }) => {
+export const ControlButtons = ({ isLoaded, diagram, onUmlShow }: { isLoaded: boolean, diagram: IDiagramItem; onUmlShow: (d: IDiagramItem) => void; }) => {
     const { zoomIn, zoomOut, resetTransform } = useControls();
 
     return (

@@ -1,7 +1,7 @@
 ﻿import { Collapse, Icon, ProgressBar } from "@blueprintjs/core";
 import { IDiagramItem } from "../Models";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import { Controls } from "./Controls";
+import { ControlButtons } from "./ControlButtons.tsx";
 
 export default function DiagramItem({ item, onDiagramClick, onUmlShow, loadedUmlImage, onItemRemove }: {
     item: IDiagramItem;
@@ -25,11 +25,11 @@ export default function DiagramItem({ item, onDiagramClick, onUmlShow, loadedUml
                 { !item.isSrcLoaded && <ProgressBar intent="none" /> }
                 <TransformWrapper centerOnInit initialScale={ 0.8 }>
                     <div className={ "schema" }>
-                        <Controls isLoaded={item.isSrcLoaded} diagram={ item } onUmlShow={ () => onUmlShow(item) } />
+                        <ControlButtons isLoaded={item.isSrcLoaded} diagram={ item } onUmlShow={ () => onUmlShow(item) } />
                         <TransformComponent>
                             <img src={ item.url } alt="svg uml diagram" onLoad={ () => loadedUmlImage(item) } />
                         </TransformComponent>
-                        <Controls isLoaded={item.isSrcLoaded} diagram={ item } onUmlShow={ () => onUmlShow(item) } />
+                        <ControlButtons isLoaded={item.isSrcLoaded} diagram={ item } onUmlShow={ () => onUmlShow(item) } />
                     </div>
                 </TransformWrapper>
             </Collapse>

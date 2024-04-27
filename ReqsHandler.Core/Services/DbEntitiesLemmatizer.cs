@@ -1,16 +1,14 @@
 ﻿using System.Text.RegularExpressions;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.SqlServer.Management.Smo;
 using ReqsHandler.Core.Configuration;
 using ReqsHandler.Core.Services.Models;
-using SpaCyDotNet.api;
 
 namespace ReqsHandler.Core.Services;
 
 public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext context)
 	: IDbEntitiesLemmatizer
 {
-	private Lang Nlp => spacyInstance.LangDocument;
-
 	private Regex ColumnSplitRegex => new Regex(context.DataSet.ColumnSplitRegex);
 
 	public IEnumerable<ReqsTable> MapTablesLemma(TableCollection? collection)
@@ -41,6 +39,7 @@ public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext 
 	private bool SplitIfNeed(string entityName, out IList<string> result)
 	{
 		var isSplit = false;
+		result = Array.Empty<string>();
 		var parts = ColumnSplitRegex.Matches(CleanUpName(entityName));
 		if (parts.Count > 1)
 		{
@@ -77,8 +76,15 @@ public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext 
 
 	private bool SplitAndLemmatize(string name, out IList<string> splitList, out IEnumerable<string> lemmas)
 	{
+		splitList = Array.Empty<string>();
+		lemmas = Array.Empty<string>();
+		if (name.IsNullOrEmpty())
+		{
+			return false;
+		}
+
 		var isSplitName = SplitIfNeed(name, out splitList);
-		var doc = Nlp.GetDocument(string.Join(" ", splitList));
+		var doc = spacyInstance.GetDocument(string.Join(" ", splitList));
 		lemmas = doc.Tokens.Where(t => !t.IsPunct).Select(t => t.Lemma.ToLower());
 
 		return isSplitName;
