@@ -26,6 +26,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UsePythonEnvironment();
+app.UseLangModel();
+
 app.MapControllers();
 
 app.Run();

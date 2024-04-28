@@ -11,9 +11,14 @@ public class ReqsService(IReqsDbProvider dbProvider, ISpacyInstance spacyInstanc
 		return spacyInstance.GetDocument(text);
 	}
 
-	public IEnumerable<ReqsTable> GetTables()
+	public IEnumerable<ReqsTable> GetDecoratedTables()
 	{
-		var database = dbProvider.GetDbSchema();
-		return lemmatizer.MapTablesLemma(database?.Tables);
+		var table = dbProvider.GetDbSchema()?.Tables;
+		if (table == null || table.Count == 0)
+		{
+			return Enumerable.Empty<ReqsTable>();
+		}
+		
+		return lemmatizer.DecorateEntitiesWithLemma(table);
 	}
 }

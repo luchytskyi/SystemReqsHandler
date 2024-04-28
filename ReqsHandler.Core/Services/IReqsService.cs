@@ -7,5 +7,5 @@ public interface IReqsService
 {
 	public Doc GetDocument(string text);
 
-	public IEnumerable<ReqsTable> GetTables();
+	public IEnumerable<ReqsTable> GetDecoratedTables();
 }

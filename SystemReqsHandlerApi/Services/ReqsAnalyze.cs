@@ -12,7 +12,7 @@ public class ReqsAnalyze(IReqsService reqsService, IClientSystemConfig systemCon
 {
 	public IEnumerable<TableDto> GetSchema()
 	{
-		return ModelToDto(reqsService.GetTables().ToList());
+		return ModelToDto(reqsService.GetDecoratedTables().ToList());
 	}
 
 	public string Tokenize(string text)
@@ -37,7 +37,7 @@ public class ReqsAnalyze(IReqsService reqsService, IClientSystemConfig systemCon
 			throw new ArgumentException("Lemmas weren't find in the speech.");
 		}
 
-		var tables = reqsService.GetTables();
+		var tables = reqsService.GetDecoratedTables();
 		var tableDto = ModelToDto(tables.ToList()).ToList();
 		var generator = new PlantUmlBuilder(tableDto);
 		var uml = generator.Build(lemmas);

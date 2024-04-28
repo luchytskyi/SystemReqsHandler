@@ -6,4 +6,9 @@ public static class ApplicationBuilderUseExtensions
 	{
 		return builder.UseMiddleware<PythonEnvironmentMiddleware>();
 	}
+	
+	public static IApplicationBuilder UseLangModel(this IApplicationBuilder builder)
+	{
+		return builder.UseMiddleware<LangModelMiddleware>();
+	}
 }

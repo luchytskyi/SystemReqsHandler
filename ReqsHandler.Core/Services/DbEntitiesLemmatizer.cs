@@ -11,13 +11,8 @@ public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext 
 {
 	private Regex ColumnSplitRegex => new Regex(context.DataSet.ColumnSplitRegex);
 
-	public IEnumerable<ReqsTable> MapTablesLemma(TableCollection? collection)
+	public IEnumerable<ReqsTable> DecorateEntitiesWithLemma(TableCollection collection)
 	{
-		if (collection == null)
-		{
-			return Enumerable.Empty<ReqsTable>();
-		}
-
 		var tables = new List<ReqsTable>();
 		foreach (Table table in collection)
 		{
