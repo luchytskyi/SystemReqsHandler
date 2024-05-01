@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.SqlServer.Management.Smo;
 using SystemReqsHandlerApi.Models;
 
@@ -15,72 +16,41 @@ public class PlantUmlBuilder(List<TableDto> tables)
 
 	public string Build(IList<string> inputLemmas)
 	{
+		var includedTables = GetRelativeTablesByLemma(inputLemmas);
+		if (includedTables.Count == 0)
+		{
+			return string.Empty;
+		}
+
+		return BuildUml(inputLemmas, includedTables);
+	}
+
+	private string BuildUml(IList<string> inputLemmas, HashSet<string> includedTables)
+	{
+		var diagram = new StringBuilder();
+		diagram.AppendLine("@startuml");
+		diagram.AppendLine(DefinedFunctions);
+		diagram.AppendLine();
+
+		// Definition of tables
+		var result = BuildTableEntities(inputLemmas, includedTables);
+		if (result.IsNullOrEmpty())
+		{
+			return string.Empty;
+		}
+
+		diagram.Append(result);
+
+		// Definition of relationships between tables
+		diagram.Append(BuildDependentTables(inputLemmas, includedTables));
+
+		diagram.AppendLine("@enduml");
+		return diagram.ToString();
+	}
+
+	private string BuildDependentTables(IList<string> inputLemmas, HashSet<string> includedTables)
+	{
 		var sb = new StringBuilder();
-		sb.AppendLine("@startuml");
-		sb.AppendLine(DefinedFunctions);
-		sb.AppendLine();
-
-		// Визначаємо, які таблиці включати
-		var includedTables = new HashSet<string>();
-		foreach (var table in tables)
-		{
-			if (IsSelectedEntity(table.Lemmas, inputLemmas)
-			    || table.Columns.Any(col => col.Lemmas.Intersect(inputLemmas).Any()))
-			{
-				includedTables.Add(table.Name);
-			}
-		}
-
-		// Додаємо таблиці, на які посилаються включені таблиці
-		foreach (var table in tables)
-		{
-			foreach (var fk in table.ForeignKeyDto)
-			{
-				if (includedTables.Contains(table.Name))
-				{
-					includedTables.Add(fk.ReferencedTable);
-				}
-			}
-		}
-
-		// Визначення таблиць
-		foreach (var table in tables)
-		{
-			if (!includedTables.Contains(table.Name))
-			{
-				continue;
-			}
-
-			var isSelected = IsSelectedEntity(table.Lemmas, inputLemmas);
-			sb.AppendLine($"entity \"{GetEntityStyledName(table.Name, isSelected)}\" {{");
-
-			// Визначення колонок
-			foreach (var column in table.Columns)
-			{
-				var iconKey = "";
-				var keyType = "";
-				if (column.IsPrimaryKey)
-				{
-					iconKey = "primary_key() ";
-					keyType = " (PK)";
-				}
-
-				var isForeignKey = table.ForeignKeyDto.Any(fk => fk.Columns.Any(fkCol => fkCol.Name == column.Name));
-				if (isForeignKey)
-				{
-					iconKey = "foreign_key() ";
-					keyType += " (FK)";
-				}
-
-				var selected = IsSelectedEntity(column.Lemmas, inputLemmas);
-				sb.AppendLine(
-					$"{iconKey}{GetEntityStyledName(column.Name, selected)}{keyType}: {GetColumnType(column)}");
-			}
-
-			sb.AppendLine("}");
-		}
-
-		// Визначення зв'язків між таблицями
 		foreach (var table in tables)
 		{
 			if (!includedTables.Contains(table.Name))
@@ -108,20 +78,107 @@ public class PlantUmlBuilder(List<TableDto> tables)
 			}
 		}
 
-		sb.AppendLine("@enduml");
 		return sb.ToString();
 	}
 
-	private string GetEntityStyledName(string entityName, bool isSelected)
+	private string BuildTableEntities(IList<string> inputLemmas, IReadOnlySet<string> includedTables)
+	{
+		var sb = new StringBuilder();
+		foreach (var table in tables)
+		{
+			if (!includedTables.Contains(table.Name))
+			{
+				continue;
+			}
+
+			var isSelected = IsSelectedEntity(table.Lemmas, inputLemmas);
+			sb.AppendLine($"entity \"{GetEntityStyledName(table.Name, isSelected)}\" {{");
+
+			// Definition of columns
+			sb.Append(BuildColumnEntities(inputLemmas, table));
+
+			sb.AppendLine("}");
+			sb.AppendLine();
+		}
+
+		return sb.ToString();
+	}
+
+	private string BuildColumnEntities(IList<string> inputLemmas, TableDto table)
+	{
+		var sb = new StringBuilder();
+		foreach (var column in table.Columns)
+		{
+			var iconKey = "";
+			var keyType = "";
+			if (column.IsPrimaryKey)
+			{
+				iconKey = "primary_key() ";
+				keyType = " (PK)";
+			}
+
+			var isForeignKey = table.ForeignKeyDto.Any(fk => fk.Columns.Any(fkCol => fkCol.Name == column.Name));
+			if (isForeignKey)
+			{
+				iconKey = "foreign_key() ";
+				keyType += " (FK)";
+			}
+
+			var selected = IsSelectedEntity(column.Lemmas, inputLemmas);
+			sb.AppendLine(
+				$"{iconKey}{GetEntityStyledName(column.Name, selected)}{keyType}: {GetColumnType(column)}");
+		}
+		
+		return sb.ToString();
+	}
+
+	private HashSet<string> GetRelativeTablesByLemma(IList<string> inputLemmas)
+	{
+		// Визначаємо, які таблиці включати
+		var includedTables = new HashSet<string>();
+		includedTables.AddRange(GetTables(inputLemmas));
+
+		// Додаємо таблиці, на які посилаються включені таблиці
+		includedTables.AddRange(GetTablesByKeyRelations(includedTables));
+		return includedTables;
+	}
+
+	private IEnumerable<string> GetTablesByKeyRelations(IReadOnlySet<string> includedTables)
+	{
+		foreach (var table in tables)
+		{
+			foreach (var fk in table.ForeignKeyDto)
+			{
+				if (includedTables.Contains(table.Name))
+				{
+					yield return fk.ReferencedTable;
+				}
+			}
+		}
+	}
+
+	private IEnumerable<string> GetTables(IList<string> inputLemmas)
+	{
+		foreach (var table in tables)
+		{
+			if (IsSelectedEntity(table.Lemmas, inputLemmas)
+			    || table.Columns.Any(col => col.Lemmas.Intersect(inputLemmas).Any()))
+			{
+				yield return table.Name;
+			}
+		}
+	}
+
+	private static string GetEntityStyledName(string entityName, bool isSelected)
 	{
 		
 		var pattern = isSelected ? "selected_entity({0})" : "{0}";
 		return string.Format(pattern, entityName);
 	}
 
-	private static bool IsSelectedEntity(IEnumerable<string> tableLemmas, IEnumerable<string> inputLemmas)
+	private static bool IsSelectedEntity(IEnumerable<string> entityLemmas, IEnumerable<string> inputLemmas)
 	{
-		return tableLemmas.Intersect(inputLemmas).Any();
+		return entityLemmas.Intersect(inputLemmas).Any();
 	}
 
 	private static string GetColumnType(ColumnDto column)
