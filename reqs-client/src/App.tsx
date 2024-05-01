@@ -8,7 +8,7 @@ import { getConfig, getDiagram } from "./components/fetchApi.ts";
 import DiagramItem from "./components/DiagramItem";
 import DataSet from "./components/DataSet.tsx";
 import Search from "./components/Search.tsx";
-import SourceCode from './components/SourceCode.tsx';
+import SourceCodePanel from './components/SourceCodePanel.tsx';
 
 export function App() {
     const [text, setText] = useState("");
@@ -121,8 +121,9 @@ export function App() {
                 </ul>
             </div>
             { selectedDiagram &&
-                <SourceCode diagram={ selectedDiagram } isOpen={ isSourceCodeOpen }
-                            onClose={ () => onSorceCodeShow(null) } />
+                <SourceCodePanel diagram={ selectedDiagram }
+                                 isOpen={ isSourceCodeOpen }
+                                 onClose={ () => onSorceCodeShow(null) } />
             }
             <Overlay2 isOpen={ isLoading }>
                 <div className={ "page-spinner" }>

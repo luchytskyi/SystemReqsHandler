@@ -7,7 +7,7 @@ export const ControlButtons = ({ isLoaded, diagram, onUmlShow }: { isLoaded: boo
 
     return (
         <div className="tools">
-            {isLoaded && 
+            {isLoaded && diagram.uml.length &&
                 <>
                     <Button minimal icon="plus" onClick={() => zoomIn()}/>
                     <Button minimal icon="minus" onClick={() => zoomOut()} />

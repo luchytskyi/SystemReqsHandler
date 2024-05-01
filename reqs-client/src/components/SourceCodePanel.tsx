@@ -1,11 +1,11 @@
-import { Drawer, DrawerProps, Pre, Tab, Tabs } from "@blueprintjs/core";
+import { Callout, Drawer, DrawerProps, Pre, Tab, Tabs } from "@blueprintjs/core";
 import { IDiagramItem } from "../Models";
 
 interface ISourceCodeProps extends Omit<DrawerProps, "icon"> {
     diagram: IDiagramItem;
 }
 
-export default function SourceCode(props: ISourceCodeProps) {
+export default function SourceCodePanel(props: ISourceCodeProps) {
     const state = {
         ...props,
         className: "source-code",
@@ -15,9 +15,17 @@ export default function SourceCode(props: ISourceCodeProps) {
         canEscapeKeyClose: true
     };
 
+    const getUmlElement = ()=> {
+        if (state.diagram.uml.length == 0) {
+            return <Callout icon={null} intent={"warning"} title="🥺 На жаль, не вдалося побудувати UML.">Завітайте до Tokens та DATA.</Callout>
+        }
+        
+        return <Pre className="code-block" children={state.diagram.uml} />;
+    }
+    
     return <Drawer {...state} icon="code">
-            <Tabs className={"tabs-source-code"} id={"code"}>
-                <Tab title={"UML"} id={"uml"} panel={<Pre className="code-block" children={state.diagram.uml} />} />
+            <Tabs className={"tabs-source-code"} defaultSelectedTabId={props.diagram.uml.length == 0 ? "tkn" : "uml"} id={"code"}>
+                <Tab title={"UML"} id={"uml"} panel={getUmlElement()} />
                 <Tab title={"TOKENS"} id={"tkn"} panel={<Pre className="code-block" children={state.diagram.tokens} />} />
                 <Tab title={"DATA"} id={"data"} panel={<Pre dangerouslySetInnerHTML={{ __html: syntaxHighlight(state.diagram.dataSetDto) }} />} />
             </Tabs>
