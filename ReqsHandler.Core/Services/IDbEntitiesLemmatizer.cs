@@ -5,5 +5,5 @@ namespace ReqsHandler.Core.Services;
 
 public interface IDbEntitiesLemmatizer
 {
-	public IEnumerable<ReqsTable> DecorateEntitiesWithLemma(TableCollection? collection);
+	public IEnumerable<ReqsTable> DecorateEntitiesWithLemma(TableCollection collection);
 }

@@ -31,6 +31,22 @@ public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext 
 		return tables;
 	}
 
+	private bool SplitAndLemmatize(string name, out IList<string> splitList, out IEnumerable<string> lemmas)
+	{
+		splitList = Array.Empty<string>();
+		lemmas = Array.Empty<string>();
+		if (name.IsNullOrEmpty())
+		{
+			return false;
+		}
+
+		var isSplitName = SplitIfNeed(name, out splitList);
+		var doc = spacyInstance.GetDocument(string.Join(" ", splitList));
+		lemmas = doc.Tokens.Where(t => !t.IsPunct).Select(t => t.Lemma.ToLower());
+
+		return isSplitName;
+	}
+
 	private bool SplitIfNeed(string entityName, out IList<string> result)
 	{
 		var isSplit = false;
@@ -67,22 +83,6 @@ public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext 
 		}
 
 		return columns;
-	}
-
-	private bool SplitAndLemmatize(string name, out IList<string> splitList, out IEnumerable<string> lemmas)
-	{
-		splitList = Array.Empty<string>();
-		lemmas = Array.Empty<string>();
-		if (name.IsNullOrEmpty())
-		{
-			return false;
-		}
-
-		var isSplitName = SplitIfNeed(name, out splitList);
-		var doc = spacyInstance.GetDocument(string.Join(" ", splitList));
-		lemmas = doc.Tokens.Where(t => !t.IsPunct).Select(t => t.Lemma.ToLower());
-
-		return isSplitName;
 	}
 
 	private string CleanUpName(string name)

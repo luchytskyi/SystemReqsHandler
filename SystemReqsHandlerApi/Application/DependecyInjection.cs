@@ -18,7 +18,7 @@ public static class DependencyInjection
 
 		collection.AddTransient<IReqsDbProvider, ReqsDbProvider>();
 		collection.AddTransient<IDbEntitiesLemmatizer, DbEntitiesLemmatizer>();
-		collection.AddTransient<IReqsAnalyzer, ReqsAnalyze>();
+		collection.AddTransient<IReqsAnalyzer, ReqsAnalyzer>();
 		collection.AddTransient<IReqsService, ReqsService>();
 
 		return builder;

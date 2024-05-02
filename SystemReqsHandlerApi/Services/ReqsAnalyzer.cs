@@ -8,7 +8,7 @@ using SystemReqsHandlerApi.Models;
 
 namespace SystemReqsHandlerApi.Services;
 
-public class ReqsAnalyze(IReqsService reqsService, IClientSystemConfig systemConfig) : IReqsAnalyzer
+public class ReqsAnalyzer(IReqsService reqsService, IClientSystemConfig systemConfig) : IReqsAnalyzer
 {
 	public IEnumerable<TableDto> GetSchema()
 	{
@@ -67,7 +67,7 @@ public class ReqsAnalyze(IReqsService reqsService, IClientSystemConfig systemCon
 		foreach (var token in doc.Tokens)
 		{
 			fillSetResult.AppendLine($"|{token.Text,-5}|{token.Lemma,-5}|{token.PoS,-5}|{token.Tag,-5}");
-			if (token is { IsStop: false, IsPunct: false }) 
+			if (token is { IsPunct: false }) 
 			{
 				lemmas.Add(token.Lemma);
 			}
