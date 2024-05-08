@@ -6,7 +6,7 @@ public class DataSet
 
 	public string ConnectionDb { get; set; } = string.Empty;
 
-	public string ColumnIdentifierPrefix { get; set; } = string.Empty;
+	public string ColumnIdentifierSuffix { get; set; } = string.Empty;
 
 	public string ColumnSplitRegex { get; set; } = string.Empty;
 }

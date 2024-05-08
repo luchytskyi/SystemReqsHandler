@@ -87,6 +87,6 @@ public class DbEntitiesLemmatizer(ISpacyInstance spacyInstance, ICurrentContext 
 
 	private string CleanUpName(string name)
 	{
-		return name.Replace(context.DataSet.ColumnIdentifierPrefix, "");
+		return name.Replace(context.DataSet.ColumnIdentifierSuffix, "");
 	}
 }
